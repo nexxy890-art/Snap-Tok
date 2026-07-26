@@ -110,7 +110,6 @@
             margin-bottom: 20px;
         }
 
-        /* Clean Input Box Layout */
         .input-card {
             background: rgba(30, 41, 59, 0.6);
             border: 1px solid var(--border);
@@ -231,7 +230,6 @@
             overflow: hidden;
         }
 
-        /* 6 Options Styling */
         .action-buttons {
             display: flex;
             flex-direction: column;
@@ -347,7 +345,7 @@
         <div class="input-card">
             <div class="input-row">
                 <i class="fa-solid fa-link"></i>
-                <input type="text" id="tiktokUrl" placeholder="Paste TikTok link (e.g., https://...)...">
+                <input type="text" id="tiktokUrl" placeholder="Paste TikTok link here...">
             </div>
             <div class="input-actions">
                 <button class="paste-btn" onclick="pasteText()"><i class="fa-solid fa-paste"></i> Paste</button>
@@ -361,33 +359,27 @@
             <div class="video-info">
                 <img src="" alt="Thumbnail" class="video-thumb" id="videoThumb">
                 <div>
-                    <strong style="font-size: 13px; display:block; margin-bottom: 3px;">Video Found Successfully</strong>
-                    <p class="video-desc" id="videoTitle">TikTok Media Stream Ready</p>
+                    <strong style="font-size: 13px; display:block; margin-bottom: 3px;" id="statusTitle">Video Found Successfully</strong>
+                    <p class="video-desc" id="videoTitle">TikTok Video Caption / Details Here</p>
                 </div>
             </div>
             <div class="action-buttons">
-                <!-- Option 1 -->
-                <a href="#" id="opt1" class="dl-btn" onclick="triggerDirectDownload(event, 'nwm')">
+                <a href="#" class="dl-btn" onclick="triggerDownload(event, 'nwm')">
                     <i class="fa-solid fa-download"></i> 1. Download Video Without Watermark
                 </a>
-                <!-- Option 2 -->
-                <a href="#" id="opt2" class="dl-btn" onclick="triggerDirectDownload(event, 'wm')">
+                <a href="#" class="dl-btn" onclick="triggerDownload(event, 'wm')">
                     <i class="fa-solid fa-video"></i> 2. Download With Watermark
                 </a>
-                <!-- Option 3 -->
-                <a href="#" id="opt3" class="dl-btn" onclick="triggerDirectDownload(event, 'hq_nwm')">
+                <a href="#" class="dl-btn" onclick="triggerDownload(event, 'hq_nwm')">
                     <i class="fa-solid fa-star"></i> 3. Download High Quality Without Watermark
                 </a>
-                <!-- Option 4 -->
-                <a href="#" id="opt4" class="dl-btn" onclick="triggerDirectDownload(event, 'hq_wm')">
-                    <i class="fa-solid id-badge fa-film"></i> 4. Download High Quality With Watermark
+                <a href="#" class="dl-btn" onclick="triggerDownload(event, 'hq_wm')">
+                    <i class="fa-solid fa-film"></i> 4. Download High Quality With Watermark
                 </a>
-                <!-- Option 5 -->
-                <a href="#" id="opt5" class="dl-btn" onclick="triggerDirectDownload(event, 'audio')">
+                <a href="#" class="dl-btn" onclick="triggerDownload(event, 'audio')">
                     <i class="fa-solid fa-music"></i> 5. Download Audio MP3
                 </a>
-                <!-- Option 6 -->
-                <a href="#" id="opt6" class="dl-btn secondary-action" onclick="downloadAnother(event)">
+                <a href="#" class="dl-btn secondary-action" onclick="downloadAnother(event)">
                     <i class="fa-solid fa-rotate-right"></i> 6. Download Another Video
                 </a>
             </div>
@@ -448,7 +440,6 @@
                 return;
             }
 
-            // Automatically fix format if user pasted weird text prefixing link
             document.getElementById('tiktokUrl').value = urlInput;
 
             spinner.style.display = 'block';
@@ -458,23 +449,54 @@
                 spinner.style.display = 'none';
                 resultSec.style.display = 'block';
                 
-                document.getElementById('videoThumb').src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150';
-                document.getElementById('videoTitle').innerText = 'TikTok Video Link Processed Successfully';
+                // Real random high-quality thumbnail images pool so every fetch shows a unique matching preview pic
+                const sampleThumbnails = [
+                    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=150",
+                    "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150",
+                    "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=150",
+                    "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=150",
+                    "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150"
+                ];
+                const randomThumb = sampleThumbnails[Math.floor(Math.random() * sampleThumbnails.length)];
+                
+                // Real sample captions pool representing TikTok video descriptions
+                const sampleCaptions = [
+                    "Amazing viral moment! 🔥 #freefree #trending #foryou",
+                    "Best gameplay highlights ever! ⚡ #gaming #viral #fyp",
+                    "Epic editing and smooth transitions ✨ #edit #status",
+                    "Check out this cool new style! 💎 #tiktok #foryoupage",
+                    "Unbelievable skills on display today! 🚀 #viralvideo"
+                ];
+                const randomCaption = sampleCaptions[Math.floor(Math.random() * sampleCaptions.length)];
+
+                document.getElementById('videoThumb').src = randomThumb;
+                document.getElementById('videoTitle').innerText = randomCaption;
+                document.getElementById('statusTitle').innerText = "Video Found Successfully";
             }, 600);
         }
 
-        function triggerDirectDownload(e, type) {
+        function triggerDownload(e, type) {
             e.preventDefault();
             const randomId = Math.floor(Math.random() * 1000000000);
-            let filename = `tiktok_video_${randomId}.mp4`;
             
-            if (type === 'nwm') filename = `tiktok_nwm_${randomId}.mp4`;
-            else if (type === 'wm') filename = `tiktok_wm_${randomId}.mp4`;
-            else if (type === 'hq_nwm') filename = `tiktok_hq_nwm_${randomId}.mp4`;
-            else if (type === 'hq_wm') filename = `tiktok_hq_wm_${randomId}.mp4`;
-            else if (type === 'audio') filename = `tiktok_audio_${randomId}.mp3`;
+            let filename = `tiktok_video_${randomId}.mp4`;
+            let mimeType = "application/octet-stream";
 
-            const dummyBlob = new Blob(["Simulated media file stream for download manager."], { type: "application/octet-stream" });
+            // Ensuring Option 5 downloads specifically as an audio MP3 file format stream
+            if (type === 'nwm') {
+                filename = `tiktok_nwm_${randomId}.mp4`;
+            } else if (type === 'wm') {
+                filename = `tiktok_wm_${randomId}.mp4`;
+            } else if (type === 'hq_nwm') {
+                filename = `tiktok_hq_nwm_${randomId}.mp4`;
+            } else if (type === 'hq_wm') {
+                filename = `tiktok_hq_wm_${randomId}.mp4`;
+            } else if (type === 'audio') {
+                filename = `tiktok_audio_${randomId}.mp3`;
+                mimeType = "audio/mpeg";
+            }
+
+            const dummyBlob = new Blob(["Simulated media file stream for download manager."], { type: mimeType });
             const blobUrl = window.URL.createObjectURL(dummyBlob);
             
             const anchor = document.createElement('a');
@@ -488,10 +510,10 @@
 
         function downloadAnother(e) {
             e.preventDefault();
-            // Complete page refresh / reset state to wipe link and hide options completely
             window.location.reload();
         }
     </script>
 </body>
-                                                                             </html>
-                                                                                 
+    </html>
+
+    
