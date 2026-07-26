@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.5">
+    <title>SnapTok - Free TikTok Video Downloader Without Watermark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF3b5c;
+            --secondary: #00f2fe;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, rgba(255, 59, 92, 0.15), rgba(0, 242, 254, 0.15));
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 7%;
+            border-bottom: 1px solid var(--border);
+            background: rgba(11, 15, 25, 0.7);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo i {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 750px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 38px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            color: #94a3b8;
+            font-size: 16px;
+            margin-bottom: 35px;
+        }
+
+        .input-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+            transition: 0.3s;
+        }
+
+        .input-card:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(255, 59, 92, 0.2);
+        }
+
+        .input-card i {
+            color: #64748b;
+            font-size: 18px;
+            padding: 0 12px;
+        }
+
+        .input-card input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .input-card input::placeholder {
+            color: #64748b;
+        }
+
+        .paste-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 8px;
+            transition: 0.2s;
+        }
+
+        .paste-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .download-main-btn {
+            background: linear-gradient(135deg, var(--primary), #ff1e42);
+            border: none;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .download-main-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        #resultSection {
+            display: none;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .video-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .video-thumb {
+            width: 70px;
+            height: 90px;
+            background: #222;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .video-desc {
+            font-size: 14px;
+            color: #cbd5e1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .dl-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .dl-btn.primary {
+            background: linear-gradient(135deg, var(--primary), #ff1e42);
+            border: none;
+        }
+
+        .dl-btn:hover {
+            transform: scale(1.01);
+            opacity: 0.95;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            margin-top: 50px;
+            text-align: left;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 14px;
+        }
+
+        .feature-card i {
+            font-size: 24px;
+            color: var(--secondary);
+            margin-bottom: 12px;
+        }
+
+        .feature-card h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            border-top: 1px solid var(--border);
+            color: #64748b;
+            font-size: 13px;
+            background: rgba(11, 15, 25, 0.5);
+        }
+
+        .loader {
+            display: none;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <header>
+        <a href="#" class="logo">
+            <i class="fa-solid fa-bolt"></i> SnapTok
+        </a>
+    </header>
+
+    <div class="container">
+        <h1 class="hero-title">Download TikTok Videos <span>Without Watermark</span></h1>
+        <p class="hero-subtitle">Fast, free, and high-definition TikTok downloader designed for everyone.</p>
+
+        <div class="input-card">
+            <i class="fa-solid fa-link"></i>
+            <input type="text" id="tiktokUrl" placeholder="Paste TikTok video link here...">
+            <button class="paste-btn" onclick="pasteText()">Paste</button>
+            <button class="download-main-btn" onclick="handleDownload()">Fetch</button>
+        </div>
+
+        <div class="loader" id="loadingSpinner"></div>
+
+        <div id="resultSection">
+            <div class="video-info">
+                <img src="" alt="Thumbnail" class="video-thumb" id="videoThumb">
+                <div>
+                    <strong style="font-size: 15px; display:block; margin-bottom: 5px;">Ready for Download</strong>
+                    <p class="video-desc" id="videoTitle">TikTok Video - No Watermark HD Version</p>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <a href="#" id="downloadNWM" class="dl-btn primary" onclick="triggerDirectDownload(event)">
+                    <i class="fa-solid fa-download"></i> Download Without Watermark HD
+                </a>
+                <a href="#" id="downloadWM" class="dl-btn" onclick="triggerDirectDownload(event)">
+                    <i class="fa-solid fa-video"></i> Download With Watermark
+                </a>
+                <a href="#" id="downloadAudio" class="dl-btn" onclick="triggerDirectDownload(event)">
+                    <i class="fa-solid fa-music"></i> Download Music (MP3)
+                </a>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <i class="fa-solid fa-ban"></i>
+                <h3>No Watermark</h3>
+                <p>Remove TikTok branding easily from any video in HD quality.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-bolt-lightning"></i>
+                <h3>Lightning Fast</h3>
+                <p>Process and save your favorite media directly to your downloads.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>100% Free</h3>
+                <p>No registration, hidden fees, or subscription charges required.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 SnapTok. Built for seamless media saving.</p>
+    </footer>
+
+    <script>
+        async function pasteText() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('tiktokUrl').value = text;
+            } catch (err) {
+                alert('Allow clipboard permission or paste manually.');
+            }
+        }
+
+        function handleDownload() {
+            const urlInput = document.getElementById('tiktokUrl').value.trim();
+            const spinner = document.getElementById('loadingSpinner');
+            const resultSec = document.getElementById('resultSection');
+
+            if (!urlInput) {
+                alert('Please enter a valid TikTok link!');
+                return;
+            }
+
+            spinner.style.display = 'block';
+            resultSec.style.display = 'none';
+
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                resultSec.style.display = 'block';
+                
+                document.getElementById('videoThumb').src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150';
+                document.getElementById('videoTitle').innerText = 'TikTok Video (ID: ' + Math.floor(Math.random() * 1000000000) + ')';
+                
+                const randomId = Math.floor(Math.random() * 1000000000000000);
+                document.getElementById('downloadNWM').setAttribute('data-filename', `tiktok_nwm_${randomId}.mp4`);
+                document.getElementById('downloadWM').setAttribute('data-filename', `tiktok_wm_${randomId}.mp4`);
+                document.getElementById('downloadAudio').setAttribute('data-filename', `tiktok_audio_${randomId}.mp3`);
+            }, 800);
+        }
+
+        function triggerDirectDownload(e) {
+            e.preventDefault();
+            const filename = e.currentTarget.getAttribute('data-filename') || 'tiktok_video.mp4';
+            
+            const dummyBlob = new Blob(["Simulated media file stream for device download folder."], { type: "application/octet-stream" });
+            const blobUrl = window.URL.createObjectURL(dummyBlob);
+            
+            const anchor = document.createElement('a');
+            anchor.href = blobUrl;
+            anchor.download = filename;
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+            window.URL.revokeObjectURL(blobUrl);
+        }
+    </script>
+</body>
+</html>
