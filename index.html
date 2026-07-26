@@ -406,6 +406,26 @@
         <p>&copy; 2026 SnapTok. All rights reserved.</p>
     </footer>
 
+    <!-- Firebase SDKs Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAK5S695EtUotQh7McfGA539z23hfkqQnM",
+            authDomain: "sukuna-chat.firebaseapp.com",
+            projectId: "sukuna-chat",
+            storageBucket: "sukuna-chat.firebasestorage.app",
+            messagingSenderId: "37564963680",
+            appId: "1:37564963680:web:ba9fcb336cf11a057f1c05",
+            measurementId: "G-CQ20F83JCL"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        console.log("Firebase initialized successfully for Sukuna-Chat!");
+    </script>
+
     <script>
         async function pasteText() {
             try {
@@ -456,11 +476,11 @@
                 ];
                 
                 const realCaptions = [
+                    "New template 💀🔥 #capcut #capcutpioneer #pioneerplate ...more",
                     "Viral TikTok Trending Clip! ✨ Check this out #trending #fyp #foryou",
                     "Amazing skills & editing display 🔥 #viralvideo #status #foryoupage",
                     "Best entertainment moment captured live! 🚀 #tiktok #funny #trend",
-                    "Awesome visual edit and smooth transition ⚡ #edit #fypシ",
-                    "Fresh video content update from TikTok feed 💎 #viral #foryou"
+                    "Awesome visual edit and smooth transition ⚡ #edit #fypシ"
                 ];
 
                 document.getElementById('videoThumb').src = realImages[Math.floor(Math.random() * realImages.length)];
@@ -476,7 +496,6 @@
             let filename = `tiktok_video_${randomId}.mp4`;
             let mimeType = "video/mp4";
             
-            // Generating a substantial dummy binary buffer size (around 3.5 MB) so file size appears properly in MBs instead of 0.05 KB
             let targetSizeMB = (type.includes('hq')) ? 8 * 1024 * 1024 : 3.5 * 1024 * 1024;
             if (type === 'audio') {
                 filename = `tiktok_audio_${randomId}.mp3`;
@@ -493,7 +512,7 @@
             }
 
             const buffer = new Uint8Array(targetSizeMB);
-            buffer.fill(88); // Filling buffer with binary bytes
+            buffer.fill(88);
 
             const dummyBlob = new Blob([buffer], { type: mimeType });
             const blobUrl = window.URL.createObjectURL(dummyBlob);
@@ -514,4 +533,4 @@
     </script>
 </body>
     </html>
-                    
+    
