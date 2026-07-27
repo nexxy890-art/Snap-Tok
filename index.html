@@ -516,7 +516,7 @@
             
             <div class="download-box">
                 <div class="input-group">
-                    <input type="text" id="urlInput" class="url-input" placeholder="Paste TikTok link here (e.g., https://vm.tiktok.com/...)">
+                    <input type="text" id="urlInput" class="url-input" placeholder="Paste TikTok link here (e.g., https://vt.tiktok.com/...)">
                     <button id="downloadBtn" class="download-btn">
                         <i class="fa-solid fa-download"></i> Download
                     </button>
@@ -601,7 +601,7 @@
         <p>&copy; 2026 SnapTok. All rights reserved. Designed for professional performance.</p>
     </footer>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Logic with CORS Bypass Proxy -->
     <script>
         const urlInput = document.getElementById('urlInput');
         const downloadBtn = document.getElementById('downloadBtn');
@@ -632,12 +632,9 @@
             downloadBtn.disabled = true;
 
             try {
-                const apiURL = `https://tikwm.com/api/?url=${encodeURIComponent(url)}`;
-                const response = await fetch(apiURL);
-                const data = await response.json();
-
-                loading.classList.remove('active');
-                downloadBtn.disabled = false;
-
-                if (data.code === 0 && data.data) {
-                    const vide
+                // Using CORS Proxy to avoid browser blocking
+                const targetApi = `https://tikwm.com/api/?url=${encodeURIComponent(url)}`;
+                const proxyURL = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetApi)}`;
+                
+                const response = await fetch(proxyURL);
+                const d
