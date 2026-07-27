@@ -217,6 +217,32 @@
             cursor: not-allowed;
         }
 
+        /* Quick Action Buttons */
+        .quick-actions {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .action-chip {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .action-chip:hover {
+            border-color: var(--primary);
+            color: var(--text);
+        }
+
         .features-list {
             display: flex;
             gap: 1.8rem;
@@ -515,10 +541,16 @@
             <p>Paste any TikTok link below to download clean HD videos instantly.</p>
             
             <div class="download-box">
+                <!-- Quick Action Buttons -->
+                <div class="quick-actions">
+                    <button type="button" class="action-chip" id="pasteBtn"><i class="fa-solid fa-paste"></i> Paste Link</button>
+                    <button type="button" class="action-chip" id="clearBtn"><i class="fa-solid fa-trash-can"></i> Clear</button>
+                </div>
+
                 <div class="input-group">
-                    <input type="text" id="urlInput" class="url-input" placeholder="Paste TikTok link here (e.g., https://vt.tiktok.com/...)">
+                    <input type="text" id="urlInput" class="url-input" placeholder="Paste TikTok link here (brackets allowed)...">
                     <button id="downloadBtn" class="download-btn">
-                        <i class="fa-solid fa-download"></i> Download
+                        <i class="fa-solid fa-download"></i> Fetch & Download
                     </button>
                 </div>
 
@@ -601,10 +633,12 @@
         <p>&copy; 2026 SnapTok. All rights reserved. Designed for professional performance.</p>
     </footer>
 
-    <!-- JavaScript Logic with CORS Bypass Proxy -->
+    <!-- JavaScript Logic with Advanced Regex Link Extractor -->
     <script>
         const urlInput = document.getElementById('urlInput');
         const downloadBtn = document.getElementById('downloadBtn');
+        const pasteBtn = document.getElementById('pasteBtn');
+        const clearBtn = document.getElementById('clearBtn');
         const loading = document.getElementById('loading');
         const errorMsg = document.getElementById('errorMsg');
         const errorText = document.getElementById('errorText');
@@ -612,29 +646,4 @@
 
         const videoCover = document.getElementById('videoCover');
         const authorAvatar = document.getElementById('authorAvatar');
-        const authorName = document.getElementById('authorName');
-        const authorUsername = document.getElementById('authorUsername');
-        const videoCaption = document.getElementById('videoCaption');
-        const downloadNoWatermark = document.getElementById('downloadNoWatermark');
-        const downloadAudio = document.getElementById('downloadAudio');
-
-        downloadBtn.addEventListener('click', async () => {
-            const url = urlInput.value.trim();
-            if (!url) {
-                showError("Please paste a valid TikTok link first!");
-                return;
-            }
-
-            // Reset UI states
-            errorMsg.classList.remove('active');
-            resultBox.classList.remove('active');
-            loading.classList.add('active');
-            downloadBtn.disabled = true;
-
-            try {
-                // Using CORS Proxy to avoid browser blocking
-                const targetApi = `https://tikwm.com/api/?url=${encodeURIComponent(url)}`;
-                const proxyURL = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetApi)}`;
-                
-                const response = await fetch(proxyURL);
-                const d
+        const au
